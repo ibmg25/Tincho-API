@@ -10,7 +10,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-app.use('/api/vuelos', vuelosRoutes);
+app.use('/api/flights', vuelosRoutes);
 
 app.get('/', (req, res) => {
     res.send('API de Agencia de Viajes');
