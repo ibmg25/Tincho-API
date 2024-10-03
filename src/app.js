@@ -1,7 +1,7 @@
 const express = require('express');
 const dotenv = require('dotenv');
 const cors = require('cors');
-const vuelosRoutes = require('./routes/flights');
+const flightsRoutes = require('./routes/flights');
 
 dotenv.config();
 
@@ -10,7 +10,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-app.use('/api/flights', vuelosRoutes);
+app.use('/api/flights', flightsRoutes);
 
 app.get('/', (req, res) => {
     res.send('API de Agencia de Viajes');

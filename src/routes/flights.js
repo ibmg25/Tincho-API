@@ -1,8 +1,8 @@
 const express = require('express');
 const router = express.Router();
-const vuelosController = require('../controllers/flightsController');
+const flightsController = require('../controllers/flightsController.js');
 
-router.get('/', vuelosController.getAllVuelos);
-router.get('/:vueloNumber', vuelosController.getVueloByNumber); 
+router.get('/', flightsController.getAllFlights);
+router.get('/:flightNumber', flightsController.getFlightByNumber); 
 
 module.exports = router;
