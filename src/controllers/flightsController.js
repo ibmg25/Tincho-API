@@ -63,6 +63,38 @@ const createFlight = async (req, res) => {
   }
 }
 
+const updateAvailableSeats = async (req, res) => {
+  const { seatsToBook } = req.body;
+  const { id } = req.params;
+  try {
+    const flightDocRef = db.collection(collectionName).doc(id);
+    const flightDoc = await flightDocRef.get();
+
+    if (!flightDoc.exists) {
+      console.log(`Vuelo con ID ${id} no encontrado.`);
+      return res.status(404).json({ error: 'Vuelo no encontrado' });
+    }
+
+    const currentSeats = flightDoc.data().availableSeats;
+    const updatedSeats = currentSeats - seatsToBook;
+
+    if (updatedSeats < 0) {
+      return res.status(400).json({ error: 'No hay suficientes asientos disponibles.' });
+    }
+
+    await flightDoc.ref.update({ availableSeats: updatedSeats });
+
+    res.status(200).json({
+      message: `Se han reservado ${seatsToBook} asientos.`,
+      availableSeats: updatedSeats
+    });
+
+  } catch (error) {
+    console.error('Error al actualizar los asientos:', error);
+    res.status(500).json({ error: 'Error al actualizar los asientos disponibles.' });
+  }
+}
+
   module.exports = {
-    getAllFlights, getFlightByNumber, createFlight
+    getAllFlights, getFlightByNumber, createFlight, updateAvailableSeats
   };
