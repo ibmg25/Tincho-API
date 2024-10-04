@@ -3,7 +3,7 @@ const router = express.Router();
 const flightsController = require('../controllers/flightsController.js');
 
 router.get('/', flightsController.getAllFlights);
-router.get('/:flightNumber', flightsController.getFlightByNumber); 
+router.get('/:id', flightsController.getFlightByID); 
 router.post('/createFlight', flightsController.createFlight);
 router.patch('/updateAvailableSeats/:id', flightsController.updateAvailableSeats);  
 

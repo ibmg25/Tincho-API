@@ -13,13 +13,16 @@ const getAllFlights = async (req, res) => {
     }
   };
 
-const getFlightByNumber = async (req, res) => {
-  let number = req.params.flightNumber
-  console.log(number)
+const getFlightByID = async (req, res) => {
+  let id = req.params.id;
+  console.log(id)
   try {
-    let querySnapshot = await db.collection(collectionName).where("flightNumber", '==', number).limit(1).get()
-    const flightDoc = querySnapshot.docs[0]; 
-    const flight = flightDoc.data()
+    const flightDoc = await db.collection(collectionName).doc(id).get();
+    if (!flightDoc.exists) {
+      return res.status(404).json({ error: "Vuelo no encontrado" });
+    }
+
+    const flight = flightDoc.data();
     res.status(200).json(flight)
   } catch (error) {
     console.error('Error al obtener el vuelo:', error); 
@@ -96,5 +99,5 @@ const updateAvailableSeats = async (req, res) => {
 }
 
   module.exports = {
-    getAllFlights, getFlightByNumber, createFlight, updateAvailableSeats
+    getAllFlights, getFlightByID, createFlight, updateAvailableSeats
   };
