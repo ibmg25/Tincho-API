@@ -1,5 +1,6 @@
+const { Timestamp } = require('firebase-admin/firestore');
 const db = require('../firebase');
-const collectionName = 'vuelos';
+const collectionName = 'flights';
 
 const getAllFlights = async (req, res) => {
     try {
@@ -26,6 +27,42 @@ const getFlightByNumber = async (req, res) => {
   }
 }
 
+const createFlight = async (req, res) => {
+  const {
+    departureCity,
+    arrivalCity,
+    departureDate,
+    arrivalDate,
+    airline,
+    flightNumber,
+    price,
+    availableSeats
+  } = req.body;
+
+  try {
+    const departureTimestamp = Timestamp.fromDate(new Date(departureDate));
+    const arrivalTimestamp = Timestamp.fromDate(new Date(arrivalDate));
+
+    const newFlight = {
+      departureCity,
+      arrivalCity,
+      departureDate: departureTimestamp,
+      arrivalDate: arrivalTimestamp,
+      airline,
+      flightNumber,
+      price,
+      availableSeats
+    };
+
+    await db.collection(collectionName).add(newFlight);
+
+    res.status(201).json({ message: 'Vuelo creado exitosamente.' });
+  } catch (error) {
+    console.error('Error al crear el vuelo:', error);
+    res.status(500).json({ error: 'Error al crear el vuelo.' });
+  }
+}
+
   module.exports = {
-    getAllFlights, getFlightByNumber
+    getAllFlights, getFlightByNumber, createFlight
   };
